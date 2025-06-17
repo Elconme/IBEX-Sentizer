@@ -26,16 +26,6 @@ start_date = datetime(2025, 5, 22).date()
 
 # Function to Get Constituents
 def get_constituents_as_of(ric_code, date_obj):
-    """
-    Fetches the constituents of an index as of a specific date.
-
-    Args:
-        ric_code (str): The RIC code of the index (e.g., '.IBEX').
-        date_obj (datetime.date): The date as a datetime.date object.
-
-    Returns:
-        pd.DataFrame: A DataFrame containing the constituents' data.
-    """
     date_str = date_obj.strftime('%Y-%m-%d') # Format date to string here
     print(f"Fetching constituents for {ric_code} as of {date_str}...")
     const_df = rdp.get_data(
@@ -49,17 +39,6 @@ def get_constituents_as_of(ric_code, date_obj):
 
 # Function to Fetch Historical Prices
 def fetch_historical_prices(ric_code, d_now_obj, days_back=365 * 5):
-    """
-    Fetches historical daily prices for a given RIC code.
-
-    Args:
-        ric_code (str): The RIC code of the instrument.
-        d_now_obj (datetime.date): The end date for the historical data as a datetime.date object.
-        days_back (int): The number of days back from d_now_obj to fetch data.
-
-    Returns:
-        pd.DataFrame: A DataFrame containing the historical price data.
-    """
     s_date = d_now_obj - timedelta(days=days_back)
     print(f"Fetching historical data from {s_date} to {d_now_obj} for RIC: {ric_code}")
 
@@ -76,17 +55,6 @@ def fetch_historical_prices(ric_code, d_now_obj, days_back=365 * 5):
 
 # Function to Fetch Financial News
 def fetch_financial_news(riclist, d_now_news_obj, out_dir='data'):
-    """
-    Fetches financial news headlines for a list of RIC codes.
-
-    Args:
-        riclist (list): A list of RIC codes.
-        d_now_news_obj (datetime.date): The end date for the news as a datetime.date object.
-        out_dir (str): The directory to save individual news CSVs.
-
-    Returns:
-        pd.DataFrame: A concatenated DataFrame of all fetched news headlines.
-    """
     os.makedirs(out_dir, exist_ok=True)
 
     news_start_date = d_now_news_obj - timedelta(days=365 * 2)
