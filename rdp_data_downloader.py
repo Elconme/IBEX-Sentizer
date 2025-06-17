@@ -19,9 +19,7 @@ try:
 except Exception as e:
     raise RuntimeError(f"Failed to open session with the provided app key. Error: {e}")
 
-# Data Definitions
 ric_index = '.IBEX'
-# Keep start_date as a datetime.date object for calculations
 start_date = datetime(2025, 5, 22).date()
 
 # Function to Get Constituents
@@ -111,15 +109,7 @@ if __name__ == "__main__":
 
     # Retrieve and save news for each financial constituent
     print("\n--- Fetching Financial News ---")
-    # Pass the datetime.date object for start_date
-    all_financial_news = fetch_financial_news(initial_constituents_rics, start_date)
-
-    if not all_financial_news.empty:
-        total_news_file_path = os.path.join('data', 'all_financial_news.csv')
-        all_financial_news.to_csv(total_news_file_path, index=True)
-        print(f"\nAll financial news headlines saved to {total_news_file_path}")
-    else:
-        print("\nNo financial news headlines were fetched.")
+    fetch_financial_news(initial_constituents_rics, start_date)
 
     # Close the RDP session when done
     try:
