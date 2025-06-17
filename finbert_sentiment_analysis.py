@@ -2,17 +2,8 @@ import pandas as pd
 from transformers import pipeline, BertTokenizer, BertForSequenceClassification
 import os
 
-# --- Define the functions (they remain the same) ---
-
+# Function to Process News Sentiment
 def process_news_sentiment(news_csv_path, finbert_model, label_to_polarity=None):
-    """
-    Analyze sentiment for news headlines in a CSV, add sentiment columns, and save back.
-    Args:
-        news_csv_path (str): Path to the news CSV file.
-        finbert_model: HuggingFace pipeline for sentiment analysis.
-        label_to_polarity (dict, optional): Mapping from sentiment label to polarity.
-                                             Defaults to {'positive': 1, 'neutral': 0, 'negative': -1}.
-    """
     if label_to_polarity is None:
         label_to_polarity = {'positive': 1, 'neutral': 0, 'negative': -1}
 
@@ -43,11 +34,8 @@ def process_news_sentiment(news_csv_path, finbert_model, label_to_polarity=None)
     except Exception as e:
         print(f"Error processing news sentiment for {os.path.basename(news_csv_path)}: {e}")
 
+# Function to Merge Sentiment with Price Data
 def merge_sentiment_with_price(price_file, news_file):
-    """
-    Merge daily sentiment scores with price data.
-    news_file: path to the news CSV file (should already contain sentiment data).
-    """
     print(f"Attempting to merge {os.path.basename(news_file)} with {os.path.basename(price_file)}...")
     try:
         price_df = pd.read_csv(price_file, parse_dates=['Date'])
