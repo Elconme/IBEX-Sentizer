@@ -8,9 +8,9 @@ import os
 import tensorflow as tf
 import random
 
-LOOKBACK_VALUES = [1, 5, 8, 10, 16, 20] 
-BASE_MODELS_DIR = 'models' 
-BASE_PLOTS_OUTPUT_DIR = 'plots' 
+LOOKBACK_VALUES = [1, 5, 8, 10, 16, 20]
+BASE_MODELS_DIR = 'models'
+BASE_PLOTS_OUTPUT_DIR = 'plots'
 TARGET_COL = 'TRDPRC_1'
 
 # Sets seed for reproducibility
@@ -95,9 +95,9 @@ def prepare_full_data_and_scale(data_df, lookback, use_sentiment, sentiment_mode
                 print(f"Warning: Main sentiment column '{main_sentiment_lag1_col}' not found or all NaN for interaction terms. Skipping interaction terms. Ensure your data has 'daily_sentiment_score' if using sentiment.")
 
     data['Target'] = data[TARGET_COL].shift(-1)
-    
+
     dates_full = data['Date'].copy()
-    
+
     data = data.dropna()
     dates_full = dates_full[data.index]
 
@@ -115,7 +115,7 @@ def prepare_full_data_and_scale(data_df, lookback, use_sentiment, sentiment_mode
         if sentiment_model_type == 'finbert':
             feature_cols += ['daily_sentiment_score_Lag1', 'sentiment_trend_3', 'sentiment_volatility_3',
                              'sentiment_ma_5', 'sentiment_diff_1']
-        
+
         if 'volatility_x_sentiment_lag1' in data.columns and not data['volatility_x_sentiment_lag1'].isnull().all():
             feature_cols += ['volatility_x_sentiment_lag1', 'returns_x_sentiment_lag1', 'volume_change_x_sentiment_lag1']
         else:
@@ -127,14 +127,14 @@ def prepare_full_data_and_scale(data_df, lookback, use_sentiment, sentiment_mode
     missing_cols = [col for col in feature_cols if col not in data.columns]
     if missing_cols:
         raise ValueError(f"Missing required feature columns: {missing_cols}. Please check your data and ensure all necessary columns are present for the chosen model type.")
-    
+
     scaler = StandardScaler()
     X_scaled_full = scaler.fit_transform(data[feature_cols])
     y_full = data['Target'].values
 
     dates_seq_full = dates_full[lookback:len(data)].reset_index(drop=True)
     X_seq_full, y_seq_full = create_sequences(X_scaled_full, y_full, lookback=lookback)
-    
+
     if len(X_seq_full) == 0:
         raise ValueError(f"No sequences created after scaling for lookback {lookback}. Check data length and lookback value.")
 
@@ -144,18 +144,15 @@ def prepare_full_data_and_scale(data_df, lookback, use_sentiment, sentiment_mode
 def plot_predictions(model, X_test, y_test, test_dates, stock_name, lookback, use_sentiment, sentiment_model_type, seed, output_dir):
     y_pred = model.predict(X_test).flatten()
 
-    plt.figure(figsize=(14, 7)) # Slightly larger figure for better date readability
-    
-    # Plot using dates for the x-axis
+    plt.figure(figsize=(14, 7))
     plt.plot(test_dates, y_test, label='Actual Price', color='blue', alpha=0.8)
     plt.plot(test_dates, y_pred, label='Predicted Price', color='red', linestyle='--', alpha=0.7)
-    
-    # Clean the stock_name for the title to remove any suffixes like '_10'
+
     clean_stock_name = stock_name.split('_')[0]
 
     sentiment_str = f"with FinBERT Sentiment" if use_sentiment else "No Sentiment"
     plot_title = f"{clean_stock_name} Stock Price Prediction\n(Lookback={lookback}, {sentiment_str})"
-    
+
     plt.title(plot_title)
     plt.xlabel("Date")
     plt.ylabel("Stock Price")
@@ -175,7 +172,12 @@ if __name__ == "__main__":
     for LOOKBACK_VALUE in LOOKBACK_VALUES:
         MODELS_BASE_DIR = os.path.join(BASE_MODELS_DIR, f'lookback{LOOKBACK_VALUE}')
         PLOTS_OUTPUT_DIR = os.path.join(BASE_PLOTS_OUTPUT_DIR, f'lookback{LOOKBACK_VALUE}')
-        
+
+        # Check if the models directory for the current lookback value exists
+        if not os.path.exists(MODELS_BASE_DIR):
+            print(f"Skipping lookback value {LOOKBACK_VALUE}: Models directory '{MODELS_BASE_DIR}' not found.")
+            continue # Skip to the next LOOKBACK_VALUE
+
         os.makedirs(PLOTS_OUTPUT_DIR, exist_ok=True)
         print(f"\n--- Processing models for LOOKBACK VALUE: {LOOKBACK_VALUE} ---")
         print(f"Models directory: {MODELS_BASE_DIR}")
@@ -192,7 +194,7 @@ if __name__ == "__main__":
             print(f"\n--- Processing saved models for {stock_name} (Lookback {LOOKBACK_VALUE}) ---")
 
             csv_file_path_list = glob.glob(os.path.join('data', f'{stock_name}.csv'))
-            
+
             if not csv_file_path_list:
                 csv_file_path_list = glob.glob(os.path.join('data', f'{stock_name}_*.csv'))
 
@@ -220,7 +222,7 @@ if __name__ == "__main__":
                 else:
                     use_sentiment = True
                     sentiment_type_to_pass = "finbert"
-                
+
                 seed_match = [part for part in model_basename.split('_') if 'seed' in part]
                 if seed_match:
                     seed = int(seed_match[0].replace('seed', ''))
@@ -246,9 +248,9 @@ if __name__ == "__main__":
                     split_point = int(len(X_seq_full) * 0.8)
                     recreated_X_test = X_seq_full[split_point:]
                     recreated_y_test = y_seq_full[split_point:]
-                    
+
                     recreated_test_dates = dates_seq_full[split_point:]
-                    
+
                     if len(recreated_X_test) == 0:
                         print(f"WARNING: Recreated test set is empty for {model_basename}. Skipping.")
                         continue
@@ -256,9 +258,9 @@ if __name__ == "__main__":
                     loaded_model = load_model(model_file)
                     print(f"Loaded model from: {os.path.basename(model_file)}")
 
-                    plot_predictions(loaded_model, recreated_X_test, recreated_y_test, 
+                    plot_predictions(loaded_model, recreated_X_test, recreated_y_test,
                                      recreated_test_dates,
-                                     stock_name, LOOKBACK_VALUE, use_sentiment, sentiment_type_to_pass, seed, PLOTS_OUTPUT_DIR) 
+                                     stock_name, LOOKBACK_VALUE, use_sentiment, sentiment_type_to_pass, seed, PLOTS_OUTPUT_DIR)
 
                 except Exception as e:
                     print(f"Error processing model {model_basename}: {e}")
