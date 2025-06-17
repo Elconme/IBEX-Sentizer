@@ -18,7 +18,7 @@ This script is responsible for the extraction of historical stock price data and
 **How to Execute:**
 ```bash
 python rdp_data_downloader.py
-
+```
 ### 2. `finbert_sentiment_analysis.py`
 
 This script processes the news headlines extracted by `rdp_data_downloader.py` to derive sentiment scores using the **FinBERT** transformer model. These sentiment scores are then integrated into your historical stock price dataset as a new feature.
@@ -30,7 +30,7 @@ This script processes the news headlines extracted by `rdp_data_downloader.py` t
 **How to Execute:**
 ```bash
 python finbert_sentiment_analysis.py
-
+```
 ### 3. `lstm_model_training.py`
 
 This script handles the training and parameter configuration of the LSTM deep learning models. It builds and trains the predictive models using the combined technical indicators and FinBERT sentiment data.
@@ -42,7 +42,7 @@ This script handles the training and parameter configuration of the LSTM deep le
 **How to Execute:**
 ```bash
 python lstm_model_training.py
-
+```
 ### 4. `prediction_plot.py`
 
 This script visualizes the performance of the trained LSTM models. It generates plots comparing the predicted stock prices against the actual historical values, allowing for a clear assessment of the model's accuracy.
@@ -54,3 +54,4 @@ This script visualizes the performance of the trained LSTM models. It generates 
 **How to Execute:**
 ```bash
 python prediction_plot.py
+```
