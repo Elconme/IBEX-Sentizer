@@ -18,3 +18,39 @@ This script is responsible for the extraction of historical stock price data and
 **How to Execute:**
 ```bash
 python rdp_data_downloader.py
+
+### 2. `finbert_sentiment_analysis.py`
+
+This script processes the news headlines extracted by `rdp_data_downloader.py` to derive sentiment scores using the **FinBERT** transformer model. These sentiment scores are then integrated into your historical stock price dataset as a new feature.
+
+-   **Key Features:**
+    * 🧠 **Sentiment Extraction:** Applies FinBERT to quantify sentiment from news.
+    * ➕ **Feature Engineering:** Adds the sentiment score as a new column to the historical price data, ready for model training.
+
+**How to Execute:**
+```bash
+python finbert_sentiment_analysis.py
+
+### 3. `lstm_model_training.py`
+
+This script handles the training and parameter configuration of the LSTM deep learning models. It builds and trains the predictive models using the combined technical indicators and FinBERT sentiment data.
+
+-   **Key Features:**
+    * 📈 **LSTM Model Training:** Configures and trains LSTM models for stock price prediction.
+-   **Data Period Consideration:** This design is optimized for a **five-year period of historical data**. If the news sentiment data is not enhanced with other sources to cover this full period, the predictive results, especially for models incorporating sentiment, may not be as promising due to the 15-month Refinitiv news API limitation.
+
+**How to Execute:**
+```bash
+python lstm_model_training.py
+
+### 4. `prediction_plot.py`
+
+This script visualizes the performance of the trained LSTM models. It generates plots comparing the predicted stock prices against the actual historical values, allowing for a clear assessment of the model's accuracy.
+
+-   **Key Features:**
+    * 📊 **Prediction Visualization:** Draws plots of predicted vs. real stock prices.
+    * 🔍 **Performance Insight:** Helps in understanding how well the models are performing over time.
+
+**How to Execute:**
+```bash
+python prediction_plot.py
