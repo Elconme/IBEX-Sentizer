@@ -1,4 +1,4 @@
-# 🇪🇸 IBEX-Sentizer: Forecasting IBEX 35 Banking Sector Stock Prices with FinBERT Sentiment and LSTM Deep Learning
+# IBEX-Sentizer: Forecasting IBEX 35 Banking Sector Stock Prices with FinBERT Sentiment and LSTM Deep Learning
 
 This repository contains the code for a project focused on forecasting stock prices within the IBEX 35 banking sector. It leverages both historical price data and FinBERT-derived sentiment from financial news headlines, processed through Long Short-Term Memory (LSTM) deep learning models.
 
@@ -48,8 +48,8 @@ python lstm_model_training.py
 This script visualizes the performance of the trained LSTM models. It generates plots comparing the predicted stock prices against the actual historical values, allowing for a clear assessment of the model's accuracy.
 
 -   **Key Features:**
-    * 📊 **Prediction Visualization:** Draws plots of predicted vs. real stock prices.
-    * 🔍 **Performance Insight:** Helps in understanding how well the models are performing over time.
+    * **Prediction Visualization:** Draws plots of predicted vs. real stock prices.
+    * **Performance Insight:** Helps in understanding how well the models are performing over time.
 
 **How to Execute:**
 ```bash
