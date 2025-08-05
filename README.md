@@ -11,8 +11,8 @@ This section outlines each file's role and provides instructions on how to execu
 This script is responsible for the extraction of historical stock price data and news headlines from **Refinitiv Workspace**.
 
 -   **Key Features:**
-    * 📊 **Historical Price Data:** Extracts daily historical stock prices.
-    * 📰 **News Headlines:** Fetches relevant news headlines.
+    * **Historical Price Data:** Extracts daily historical stock prices.
+    * **News Headlines:** Fetches relevant news headlines.
 -   **Important Note:** The Refinitiv API for news extraction has a limitation and **only allows extraction of news from the past 15 months**. This means that if your project requires a longer history of sentiment data, you might need to supplement it with data from other sources.
 
 **How to Execute:**
@@ -21,11 +21,11 @@ python rdp_data_downloader.py
 ```
 ### 2. `finbert_sentiment_analysis.py`
 
-This script processes the news headlines extracted by `rdp_data_downloader.py` to derive sentiment scores using the **FinBERT** transformer model. These sentiment scores are then integrated into your historical stock price dataset as a new feature.
+This script processes the news headlines extracted by `rdp_data_downloader.py` to derive sentiment scores using the **FinBERT** transformer model. These sentiment scores are then integrated into the historical stock price dataset as a new feature.
 
 -   **Key Features:**
-    * 🧠 **Sentiment Extraction:** Applies FinBERT to quantify sentiment from news.
-    * ➕ **Feature Engineering:** Adds the sentiment score as a new column to the historical price data, ready for model training.
+    * **Sentiment Extraction:** Applies FinBERT to quantify sentiment from news.
+    * **Feature Engineering:** Adds the sentiment score as a new column to the historical price data and transforms the sentiment scores to standardize the values. Ready for model training!
 
 **How to Execute:**
 ```bash
@@ -36,8 +36,8 @@ python finbert_sentiment_analysis.py
 This script handles the training and parameter configuration of the LSTM deep learning models. It builds and trains the predictive models using the combined technical indicators and FinBERT sentiment data.
 
 -   **Key Features:**
-    * 📈 **LSTM Model Training:** Configures and trains LSTM models for stock price prediction.
--   **Data Period Consideration:** This design is optimized for a **five-year period of historical data**. If the news sentiment data is not enhanced with other sources to cover this full period, the predictive results, especially for models incorporating sentiment, may not be as promising due to the 15-month Refinitiv news API limitation.
+    * **LSTM Model Training:** Configures and trains LSTM models for stock price prediction.
+-   **Data Period Consideration:** This design has been proven with a **five-year period of historical data**. If the news sentiment data is not enhanced with other sources to cover this full period, the predictive results, especially for models incorporating sentiment, may not be as promising due to the 15-month Refinitiv news API limitation.
 
 **How to Execute:**
 ```bash
