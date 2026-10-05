@@ -233,11 +233,11 @@ def run_random_search(data, num_iterations, lookback_value, use_sentiment, senti
     
     param_grid = {
         'units': [32, 64, 128, 256],
-        'dropout_rate': [0.1, 0.2, 0.3, 0.4, 0.5],
-        'optimizer_name': ['Adam', 'Nadam', 'RMSprop', 'SGD'],
-        'activation_function': ['relu', 'tanh', 'selu', 'elu', 'swish'],
-        'learning_rate': [0.001, 0.01, 0.1],
-        'epochs': [50, 100, 150],
+        'dropout_rate': [0.2, 0.3, 0.4, 0.5],
+        'optimizer_name': ['Adam', 'Nadam', 'RMSprop'],
+        'activation_function': ['relu', 'elu'],
+        'learning_rate': [0.001, 0.01],
+        'epochs': [50, 100],
         'batch_size': [16, 32, 64]
     }
 
@@ -299,9 +299,9 @@ def run_random_search(data, num_iterations, lookback_value, use_sentiment, senti
     return pd.DataFrame(results), best_model_for_search
 
 if __name__ == "__main__":
-    fixed_lookback = 8
-    num_random_search_iterations = 5
-    seeds_to_test = [10,20,30,40]
+    fixed_lookback = 1
+    num_random_search_iterations = 3
+    seeds_to_test = [10, 20, 30, 40]
     sentiment_models_to_test = ['finbert']
 
     final_experiment_results = []
